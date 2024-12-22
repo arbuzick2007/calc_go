@@ -11,7 +11,7 @@ var (
 	ErrDivisionByZero  = errors.New("division by zero is forbidden")
 	ErrNotNumber       = errors.New("not numbers")
 	ErrOperation       = errors.New("operation is not between two expressions")
-	ErrEmptyExpression = errors.New("expression is empty")
+	ErrEmptyExpression = errors.New("empty expression")
 )
 
 func isOperation(symb rune) bool {
@@ -52,6 +52,9 @@ func CheckExpression(expressionStr string) error {
 		}
 		if symb == '(' && expression[ind+1] == ')' {
 			return ErrEmptyBrackets
+		}
+		if symb != '(' && symb != ')' && !isOperation(symb) && !unicode.IsDigit(symb) {
+			return ErrNotNumber
 		}
 	}
 	return nil

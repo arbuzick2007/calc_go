@@ -2,6 +2,7 @@ package application
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -36,7 +37,7 @@ type Request struct {
 }
 
 type ResponseCorrect struct {
-	Result float64 `json:"result"`
+	Result string `json:"result"`
 }
 
 type ResponseError struct {
@@ -78,7 +79,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response := ResponseCorrect{
-		Result: result,
+		Result: fmt.Sprint(result),
 	}
 	responseJson, _ := json.Marshal(response)
 	w.WriteHeader(http.StatusOK)

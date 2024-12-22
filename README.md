@@ -37,7 +37,7 @@ go run cmd/main.go
 
 ```json
 {
-  "expression": "52+5"
+  "expression": "5+7"
 }
 ```
 
@@ -47,7 +47,7 @@ go run cmd/main.go
 
 ```json
 {
-  "result": "57"
+  "result": "12"
 }
 ```
 
@@ -77,7 +77,7 @@ go run cmd/main.go
 
 ```json
 {
-  "expression": "52/0"
+  "expression": "5/0"
 }
 ```
 
