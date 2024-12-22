@@ -82,17 +82,15 @@ curl -X POST -H "Content-Type: application/json" -d "{\"expression\": \"5+2\"}" 
 ### Тело запроса
 
 ```json
-{
-  "expression": "5/0"
-}
+
 ```
 
 ### Ответ
 
-**Статус-код: `500 Internal Server Error`**
+**Статус-код: `400 Bad Request`**
 
 ```json
 {
-  "error": "division by zero is forbidden"
+  "error": "incorrect request"
 }
 ```

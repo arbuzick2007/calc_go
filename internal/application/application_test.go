@@ -44,15 +44,15 @@ func TestCalcHandler(t *testing.T) {
 			name:           "Empty Body",
 			method:         http.MethodPost,
 			body:           nil,
-			expectedStatus: http.StatusInternalServerError,
-			expectedResult: "",
+			expectedStatus: http.StatusBadRequest,
+			expectedResult: `{"error":"incorrect request"}`,
 		},
 		{
 			name:           "Division By Zero",
 			method:         http.MethodPost,
 			body:           map[string]string{"expression": "5/0"},
-			expectedStatus: http.StatusInternalServerError,
-			expectedResult: "",
+			expectedStatus: http.StatusUnprocessableEntity,
+			expectedResult: `{"error":"division by zero is forbidden"}`,
 		},
 	}
 	for _, test := range tests {
