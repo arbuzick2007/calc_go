@@ -1,17 +1,17 @@
-package main
+package calc
 
 import (
 	"errors"
-    "unicode"
+	"unicode"
 )
 
 var (
-	ErrBrackets        = errors.New("Brackets don't match")
-	ErrEmptyBrackets   = errors.New("Empty brackets")
-	ErrDivisionByZero  = errors.New("Division by zero is forbidden")
-	ErrNotNumber       = errors.New("Not numbers")
-	ErrOperation       = errors.New("Operation is not between two expressions")
-	ErrEmptyExpression = errors.New("Expression is empty")
+	ErrBrackets        = errors.New("brackets don't match")
+	ErrEmptyBrackets   = errors.New("empty brackets")
+	ErrDivisionByZero  = errors.New("division by zero is forbidden")
+	ErrNotNumber       = errors.New("not numbers")
+	ErrOperation       = errors.New("operation is not between two expressions")
+	ErrEmptyExpression = errors.New("expression is empty")
 )
 
 func isOperation(symb rune) bool {

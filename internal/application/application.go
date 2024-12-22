@@ -1,12 +1,11 @@
 package application
 
 import (
-	"bufio"
-	"log"
+	"encoding/json"
+	"net/http"
 	"os"
-	"strings"
-	"json"
-	"github.com/arbuzick57/calc_go/pkg/calc_go"
+
+	"github.com/arbuzick57/calc_go/pkg/calc"
 )
 
 type Config struct {
@@ -28,7 +27,7 @@ type Application struct {
 
 func New() *Application {
 	return &Application{
-		config: ConfigFromEnv()
+		config: ConfigFromEnv(),
 	}
 }
 
@@ -36,21 +35,50 @@ type Request struct {
 	Expression string `json:"expression"`
 }
 
+type ResponseCorrect struct {
+	Result float64 `json:"result"`
+}
+
+type ResponseError struct {
+	Error string `json:"error"`
+}
+
 func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	request := new(Request)
-	defer r.Body().Close()
+	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		http.Error(w, error.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	result, err := calc.Calc(r.expression)
-	if err != nil {
-		fmt.Fprintf(w, "err: %s", err.Error())
-	} else {
-		fmt.Fprintf(w, "result: %f", result)
+	errExpression := calc.CheckExpression(request.Expression)
+	if errExpression != nil {
+		response := ResponseError{
+			Error: errExpression.Error(),
+		}
+		responseJson, _ := json.Marshal(response)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(responseJson)
+		return
 	}
+
+	result, errCalc := calc.Calc(request.Expression)
+	if errCalc != nil {
+		response := ResponseError{
+			Error: errCalc.Error(),
+		}
+		responseJson, _ := json.Marshal(response)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(responseJson)
+		return
+	}
+	response := ResponseCorrect{
+		Result: result,
+	}
+	responseJson, _ := json.Marshal(response)
+	w.WriteHeader(http.StatusOK)
+	w.Write(responseJson)
 }
 
 func (a *Application) RunServer() error {
