@@ -48,7 +48,7 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -57,8 +57,12 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		response := ResponseError{
 			Error: errExpression.Error(),
 		}
-		responseJson, _ := json.Marshal(response)
-		w.WriteHeader(http.StatusBadRequest)
+		responseJson, err := json.Marshal(response)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusUnprocessableEntity)
 		w.Write(responseJson)
 		return
 	}
