@@ -79,7 +79,7 @@ curl -X POST -H "Content-Type: application/json" -d "{\"expression\": \"5+2\"}" 
 
 3. **Ошибка при вычислении**
 
-### Тело запроса
+### Тело запроса (пустой запрос)
 
 ```json
 
