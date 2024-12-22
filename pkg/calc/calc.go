@@ -1,17 +1,7 @@
 package calc
 
 import (
-	"errors"
 	"unicode"
-)
-
-var (
-	ErrBrackets        = errors.New("brackets don't match")
-	ErrEmptyBrackets   = errors.New("empty brackets")
-	ErrDivisionByZero  = errors.New("division by zero is forbidden")
-	ErrNotNumber       = errors.New("not numbers")
-	ErrOperation       = errors.New("operation is not between two expressions")
-	ErrEmptyExpression = errors.New("empty expression")
 )
 
 func isOperation(symb rune) bool {
@@ -25,8 +15,7 @@ func getPriority(symb rune) int {
 	return 1
 }
 
-func CheckExpression(expressionStr string) error {
-	expression := []rune(expressionStr)
+func checkExpression(expression []rune) error {
 	if len(expression) == 0 {
 		return ErrEmptyExpression
 	}
@@ -62,6 +51,10 @@ func CheckExpression(expressionStr string) error {
 
 func Calc(expressionStr string) (float64, error) {
 	expression := []rune(expressionStr)
+	err := checkExpression(expression)
+	if err != nil {
+		return 0, err
+	}
 	ord := make([]rune, 0)
 	stack := make([]rune, 0)
 	for _, symb := range expression {

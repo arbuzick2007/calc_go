@@ -62,21 +62,6 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errExpression := calc.CheckExpression(request.Expression)
-	if errExpression != nil {
-		response := ResponseError{
-			Error: errExpression.Error(),
-		}
-		responseJson, err := json.Marshal(response)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		w.Write(responseJson)
-		return
-	}
-
 	result, errCalc := calc.Calc(request.Expression)
 	if errCalc != nil {
 		response := ResponseError{
